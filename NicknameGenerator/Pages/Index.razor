@@ -9,6 +9,7 @@ You can set the first few letters of generated nickname.
 
    
 <br/>
+    <input @bind-value="Nickname.Start" firstletters="Letters with which the generated nickname will begin" />
 <style>
         input {
             margin-top: 10px;
@@ -22,7 +23,9 @@ You can set the first few letters of generated nickname.
 
     class Nickname
     {
+        public static string? Start { get; set; }
         public static string? Generated;
+        public static string? GeneratedPart;
 
     }
    
@@ -65,16 +68,16 @@ You can set the first few letters of generated nickname.
     void GenerateNickname()
     {
         Random rand = new Random();
-        
-        Nickname.Generated = null;
+        Nickname.GeneratedPart = null;
         for(int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
         {
-            
             var j = rand.Next(20);
-            Nickname.Generated += consonantList[j];
+            Nickname.GeneratedPart += consonantList[j];
             var i = rand.Next(6);
-            Nickname.Generated += vowelList[i];
+            Nickname.GeneratedPart += vowelList[i];
             
         }
+                    
+        Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
     }
 }
