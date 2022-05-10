@@ -5,32 +5,73 @@
 <h1>Generate random nickname</h1>
 
 The nickname generator creates nicknames in English, from 3 to 15 letters long.<br/>
-You can set the first few letters of generated nickname.
+You can set the first letter of generated nickname.
 
    
 <br/>
-    <input @bind-value="Nickname.Start" firstletters="Letters with which the generated nickname will begin" />
-<style>
-        input {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
-<button @onclick="GenerateNickname">Generate</button> 
+@if (Settings.IsDroplist) {
+    <select style ="margin-top: 5px;
+                    margin-right: 5px;"
+    @bind="Nickname.Start">
+    <option value=""></option>
+    @foreach (var let in letterList)
+    {
+        <option value="@let">@let</option>
+    }
+</select>
+}
+else {
+<input style ="margin-top: 5px;
+               margin-bottom: 5px;"
+       @bind-value="Nickname.Start" firstletters="Letters with which the generated nickname will begin" />
+}
+
+<br/>
+<button
+    style ="margin-top: 2px;
+            margin-bottom: 2px;"
+    @onclick="GenerateNickname">Generate</button> 
 <p>Your new nickname is: @Nickname.Generated</p>
 
 @code {
 
-    class Nickname
+    public class Nickname
     {
         public static string? Start { get; set; }
         public static string? Generated;
         public static string? GeneratedPart;
 
     }
-   
-            
-    
+
+    List<char> letterList = new()
+    {
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z'
+};
     List<char> vowelList = new List<char>
     {
         'a',

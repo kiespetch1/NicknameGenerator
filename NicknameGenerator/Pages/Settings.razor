@@ -1,6 +1,33 @@
 ﻿@page "/Settings"
 <h3>Settings</h3>
+<h5>Input method</h5>
+<label>
+    <input 
+        style ="margin-right: 5px;"
+        type="radio"
+        value=""
+        checked="@(IsDroplist == true)"
+        name = "group"
+        @onclick="()=>DroplistSwitch(true)"
+    />I want to choose one first letter of nickname
+</label>
+<br/>
+<input
+        style ="margin-right: 5px;"
+        type="radio"
+        value=""
+        checked="@(IsDroplist == false)"
+        name="group"
+        @onclick="() => DroplistSwitch(false)"
+    />I want to type start of my nickname
 
 @code {
+    public static bool IsDroplist = true;
+
+    void DroplistSwitch(bool ToDroplist)
+    {
+        IsDroplist = ToDroplist;
+        Index.Nickname.Start = null;
+    }
     
 }
