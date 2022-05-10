@@ -1,0 +1,80 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Generate random nickname</h1>
+
+The nickname generator creates nicknames in English, from 3 to 15 letters long.<br/>
+You can set the first few letters of generated nickname.
+
+   
+<br/>
+<style>
+        input {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+<button @onclick="GenerateNickname">Generate</button> 
+<p>Your new nickname is: @Nickname.Generated</p>
+
+@code {
+
+    class Nickname
+    {
+        public static string? Generated;
+
+    }
+   
+            
+    
+    List<char> vowelList = new List<char>
+    {
+        'a',
+        'e',
+        'i',
+        'o',
+        'u',
+        'y'
+    };
+    List<char> consonantList = new List<char>
+    {
+        'b',
+        'c',
+        'd',
+        'f',
+        'g',
+        'h',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z'
+    };
+
+    void GenerateNickname()
+    {
+        Random rand = new Random();
+        
+        Nickname.Generated = null;
+        for(int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
+        {
+            
+            var j = rand.Next(20);
+            Nickname.Generated += consonantList[j];
+            var i = rand.Next(6);
+            Nickname.Generated += vowelList[i];
+            
+        }
+    }
+}
