@@ -34,6 +34,7 @@ else {
 <p>Your new nickname is: @Nickname.Generated</p>
 
 @code {
+    public bool IsConsonant;
 
     public class Nickname
     {
@@ -110,15 +111,54 @@ else {
     {
         Random rand = new Random();
         Nickname.GeneratedPart = null;
-        for(int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
+        
+        foreach (var start in consonantList)
         {
-            var j = rand.Next(20);
-            Nickname.GeneratedPart += consonantList[j];
-            var i = rand.Next(6);
-            Nickname.GeneratedPart += vowelList[i];
+            if (Nickname.Start != null)
+            {
+                char end = Nickname.Start[Nickname.Start.Length - 1];
+                if (end == start)
+                {
+                    IsConsonant = true;
+                }
+            }
+        }
+        foreach (var start in vowelList)
+        {
+            if (Nickname.Start != null)
+            {
+                char end = Nickname.Start[Nickname.Start.Length - 1];
+                if (end == start)
+                {
+                    IsConsonant = false;
+                }
+            }
+        }
+        
+        
+            if(IsConsonant == false)
+        {
+                for (int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
+            {
+                var j = rand.Next(20);
+                Nickname.GeneratedPart += consonantList[j];
+                var i = rand.Next(6);
+                Nickname.GeneratedPart += vowelList[i];
+
+            }
             
         }
-                    
-        Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
+            else
+            {
+                for (int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
+                {
+                    var i = rand.Next(6);
+                    Nickname.GeneratedPart += vowelList[i];
+                    var j = rand.Next(20);
+                    Nickname.GeneratedPart += consonantList[j];
+                }
+            }
+
+            Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
     }
 }

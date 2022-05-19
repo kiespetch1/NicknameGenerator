@@ -19,14 +19,14 @@
         checked="@(IsDroplist == false)"
         name="group"
         @onclick="() => DroplistSwitch(false)"
-    />I want to type start of my nickname
+/>I want to type start of my nickname
 
 @code {
     public static bool IsDroplist = true;
 
-    void DroplistSwitch(bool ToDroplist)
+    void DroplistSwitch(bool toDroplist)
     {
-        IsDroplist = ToDroplist;
+        IsDroplist = toDroplist;
         Index.Nickname.Start = null;
     }
     
