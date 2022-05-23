@@ -4,15 +4,35 @@
 
 <h1>Generate random nickname</h1>
 
-The nickname generator creates nicknames in English, from 3 to 15 letters long.<br/>
-You can set the first letter of generated nickname.
-
-   
+The nickname generator creates nicknames in English, from 3 to 15 letters long.
+You can set the first few letters of generated nickname.
 <br/>
-@if (Settings.IsDroplist) {
-    <select style ="margin-top: 5px;
-                    margin-right: 5px;"
-    @bind="Nickname.Start">
+<h5>Final length</h5>
+<select
+        style ="margin-bottom: 5px;"
+        @bind="Nickname.Length">
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+</select>
+<h5>First letters</h5>
+@if (_isPossible == false)
+{  <b> <div
+                  style = "color:red;"
+                  font-weight: bold>The number of start characters cannot be equal to or greater than the total length of the nickname</div></b>
+    }
+    @if (Settings.IsDroplist) {
+    <select 
+        style ="margin-bottom: 5px;"
+        @bind="Nickname.Start">
     <option value=""></option>
     @foreach (var let in letterList)
     {
@@ -21,59 +41,32 @@ You can set the first letter of generated nickname.
 </select>
 }
 else {
-<input style ="margin-top: 5px;
-               margin-bottom: 5px;"
-       @bind-value="Nickname.Start" firstletters="Letters with which the generated nickname will begin" />
+<input style ="margin-bottom: 5px;"
+       @bind-value="Nickname.Start"/>
 }
 
 <br/>
 <button
     style ="margin-top: 2px;
             margin-bottom: 2px;"
-    @onclick="GenerateNickname">Generate</button> 
-<p>Your new nickname is: @Nickname.Generated</p>
+    @onclick="GenerateNickname">Generate</button>
+<p>Your new nickname is: <b>@Nickname.Generated</b></p>
 
-@code {
-    public bool IsConsonant;
 
+@code 
+{
+    private bool _isPossible = true;
+    
     public class Nickname
     {
-        public static string? Start { get; set; }
+        public static string? Start;
         public static string? Generated;
         public static string? GeneratedPart;
-
+        public static int? Length = 3;
+        public static string? Sequence;
     }
 
-    List<char> letterList = new()
-    {
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j',
-        'k',
-        'l',
-        'm',
-        'n',
-        'o',
-        'p',
-        'q',
-        'r',
-        's',
-        't',
-        'u',
-        'v',
-        'w',
-        'x',
-        'y',
-        'z'
-};
-    List<char> vowelList = new List<char>
+    List<char> vowelList = new()
     {
         'a',
         'e',
@@ -82,7 +75,7 @@ else {
         'u',
         'y'
     };
-    List<char> consonantList = new List<char>
+    List<char> consonantList = new()
     {
         'b',
         'c',
@@ -106,59 +99,99 @@ else {
         'y',
         'z'
     };
-
+    
     void GenerateNickname()
     {
+        if (Nickname.Start != null && Nickname.Start.Length >= Nickname.Length)
+        {
+            _isPossible = false;
+            return;
+        }
+        else
+        {
+            _isPossible = true;
+        }
         Random rand = new Random();
-        Nickname.GeneratedPart = null;
-        
-        foreach (var start in consonantList)
+        int? generateRepeatNumber;
+        if (Nickname.Start != null )
         {
-            if (Nickname.Start != null)
-            {
-                char end = Nickname.Start[Nickname.Start.Length - 1];
-                if (end == start)
-                {
-                    IsConsonant = true;
-                }
-            }
+            generateRepeatNumber = Nickname.Length - Nickname.Start.Length;
         }
-        foreach (var start in vowelList)
+        else
         {
-            if (Nickname.Start != null)
-            {
-                char end = Nickname.Start[Nickname.Start.Length - 1];
-                if (end == start)
-                {
-                    IsConsonant = false;
-                }
-            }
+            generateRepeatNumber = Nickname.Length;
         }
-        
-        
-            if(IsConsonant == false)
+        switch(Settings.GeneratorType)
         {
-                for (int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
-            {
-                var j = rand.Next(20);
-                Nickname.GeneratedPart += consonantList[j];
-                var i = rand.Next(6);
-                Nickname.GeneratedPart += vowelList[i];
-
-            }
-            
-        }
-            else
-            {
-                for (int repeatIndex = 1; repeatIndex <= 4; repeatIndex++)
+            case 
+                2:
                 {
-                    var i = rand.Next(6);
-                    Nickname.GeneratedPart += vowelList[i];
-                    var j = rand.Next(20);
-                    Nickname.GeneratedPart += consonantList[j];
+                Nickname.GeneratedPart = null;
+                Nickname.Sequence = null;
+                    for (int repeatIndex = 0; repeatIndex != generateRepeatNumber; repeatIndex++)
+                {
+                    Nickname.Sequence += rand.Next(1, 3);
                 }
+                for (int repeatIndex = 0; repeatIndex != generateRepeatNumber; repeatIndex++)
+                {
+                    if (Nickname.Sequence![repeatIndex] == '1')
+                    {
+                        var j = rand.Next(20);
+                        Nickname.GeneratedPart += consonantList[j];
+                    }
+                    else
+                    {
+                        if (Nickname.Sequence[repeatIndex] == '2')
+                        {
+                            var i = rand.Next(6);
+                            Nickname.GeneratedPart += vowelList[i];
+                        }
+                    }
+                }
+                Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
             }
-
-            Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
+                break;
+            case 
+                1:
+            {
+                Nickname.GeneratedPart = null;
+                Nickname.Sequence = null;
+                Nickname.Sequence += rand.Next(1, 3);
+                for (int repeatIndex = 0; repeatIndex != (generateRepeatNumber - 1); repeatIndex++)
+                {
+                    switch (Nickname.Sequence[^1])
+                    {
+                       case '1':
+                           Nickname.Sequence += 2;
+                           break;
+                        case '2': 
+                            Nickname.Sequence += 1;
+                            break;
+                    }
+                 
+                }
+                //расшифровка
+                for (int repeatIndex = 0; repeatIndex != generateRepeatNumber; repeatIndex++)
+                {
+                    if (Nickname.Sequence[repeatIndex] == '1')
+                    {
+                        var j = rand.Next(20);
+                        Nickname.GeneratedPart += consonantList[j];
+                    }
+                    else
+                    {
+                        if (Nickname.Sequence[repeatIndex] == '2')
+                        {
+                            var i = rand.Next(6);
+                            Nickname.GeneratedPart += vowelList[i];
+                        }
+                    }
+                }
+                
+                Nickname.Generated = Nickname.Start + Nickname.GeneratedPart;
+            }
+                break;
+        }
+                
     }
 }

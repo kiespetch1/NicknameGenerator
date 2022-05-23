@@ -20,9 +20,17 @@
         name="group"
         @onclick="() => DroplistSwitch(false)"
 />I want to type start of my nickname
+<h5>Generator type</h5>
+    <select style ="margin-top: 5px;
+                        margin-right: 5px;"
+            @bind="GeneratorType">
+        <option value="1">1 - easy to pronounce</option>
+        <option value="2">2 - totally random and sometimes prettier</option>
+    </select>
 
 @code {
     public static bool IsDroplist = true;
+    public static int GeneratorType = 1;
 
     void DroplistSwitch(bool toDroplist)
     {
